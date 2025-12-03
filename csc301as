@@ -1,0 +1,127 @@
+class Node:
+    """
+    A single node in the linked list.
+    """
+    def __init__(self, data):
+        self.data = data  # Data stored in the node
+        self.next = None  # Pointer to the next node (initially None)
+class LinkedList:
+    """
+    The main linked list structure.
+    """
+    def __init__(self):
+        self.head = None # Head of the list (initially empty)
+
+    # --- Operations ---
+
+    ### 🟢 insert_at_beginning(data)
+    def insert_at_beginning(self, data):
+        """
+        Inserts a new node at the start of the list.
+        """
+        new_node = Node(data)
+        new_node.next = self.head  # New node's next pointer points to the current head
+        self.head = new_node       # Update the head to be the new node
+        print(f"-> Inserted {data} at the beginning.")
+
+    ### ➡️ insert_at_end(data)
+    def insert_at_end(self, data):
+        """
+        Inserts a new node at the end of the list.
+        """
+        new_node = Node(data)
+        
+        # 1. If the list is empty, make the new node the head
+        if self.head is None:
+            self.head = new_node
+            print(f"-> Inserted {data} at the end (list was empty).")
+            return
+
+        # 2. Traverse to the last node
+        current = self.head
+        while current.next:
+            current = current.next
+        
+        # 3. Change the last node's next pointer to the new node
+        current.next = new_node
+        print(f"-> Inserted {data} at the end.")
+
+    ### ❌ delete_node(key)
+    def delete_node(self, key):
+        """
+        Deletes the first node found with the given key (data).
+        """
+        current = self.head
+        prev = None
+
+        # 1. Case: Node to be deleted is the head
+        if current and current.data == key:
+            self.head = current.next  # Move the head to the next node
+            print(f"-> Deleted HEAD node with key: {key}")
+            return
+
+        # 2. Search for the key to be deleted, keeping track of the previous node
+        while current and current.data != key:
+            prev = current
+            current = current.next
+
+        # 3. Case: Key was not found
+        if current is None:
+            print(f"-> Node with key {key} not found.")
+            return
+
+        # 4. Case: Key is found (current is the node to delete)
+        # Unlink the node from the list by updating the previous node's next pointer
+        if prev:
+            prev.next = current.next
+            print(f"-> Deleted node with key: {key}")
+        
+        # Note: 'current' is automatically handled by Python's garbage collector.
+
+
+    ### 📋 display_list()
+    def display_list(self):
+        """
+        Traverses the list and prints all data elements.
+        """
+        current = self.head
+        elements = []
+        while current:
+            elements.append(str(current.data))
+            current = current.next
+        
+        print("\n*** Current Linked List ***")
+        if not elements:
+             print("List is EMPTY.")
+        else:
+            print(" -> ".join(elements))
+        print("***************************")
+        
+        # Adding a visual representation of a Linked List for better understanding.
+        
+# Create a new linked list instance
+my_list = LinkedList()
+
+# Insert at least 5 values:
+print("--- Insertion Phase ---")
+my_list.insert_at_beginning(10)
+my_list.insert_at_end(50)
+my_list.insert_at_end(60)
+my_list.insert_at_beginning(5)
+my_list.insert_at_end(70) # Total 5 values inserted
+
+# Display the initial list
+my_list.display_list()
+
+# Delete one value (Test deleting one from the middle)
+print("\n--- Deletion Phase ---")
+my_list.delete_node(50)
+
+# Display the final list
+my_list.display_list()
+
+# --- Optional Test Cases ---
+# my_list.delete_node(5) # Test deleting the head
+# my_list.delete_node(70) # Test deleting the tail
+# my_list.delete_node(999) # Test deleting a non-existent key
+
